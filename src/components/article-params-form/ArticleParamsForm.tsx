@@ -2,9 +2,8 @@ import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
 import clsx from 'clsx';
 import { Text } from 'components/text';
-
 import styles from './ArticleParamsForm.module.scss';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { Select } from '../select';
 import {
 	fontFamilyOptions,
@@ -14,14 +13,20 @@ import {
 	fontColors,
 	backgroundColors,
 	contentWidthArr,
+	ArticleStateType,
 } from '../../constants/articleProps';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
+import { useOutsideClickClose } from '../select/hooks/useOutsideClickClose';
 
-export const ArticleParamsForm = () => {
+interface formProps {
+	changed: ({}: ArticleStateType) => void;
+}
+
+export const ArticleParamsForm = ({ changed }: formProps) => {
 	const [isOpen, setOpen] = useState(false);
 	const [params, setParams] = useState(defaultArticleState);
-	// const containerRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	function toggleMenu() {
 		setOpen(!isOpen);
@@ -33,16 +38,26 @@ export const ArticleParamsForm = () => {
 
 	function handleOptionReset(evt: FormEvent<HTMLFormElement>) {
 		evt.preventDefault();
+		changed(defaultArticleState);
 		setParams(defaultArticleState);
 	}
 
 	function handleOptionSubmit(evt: FormEvent<HTMLFormElement>) {
 		evt.preventDefault();
-		setParams(params);
+		changed(params);
 	}
 
+	useOutsideClickClose({
+		isOpen,
+		onClose: toggleMenu,
+		rootRef: containerRef,
+		onChange: (value: any) => {
+			console.log('Changed', value);
+		},
+	});
+
 	return (
-		<>
+		<div ref={containerRef}>
 			<ArrowButton
 				isOpen={isOpen}
 				onClick={() => {
@@ -108,6 +123,6 @@ export const ArticleParamsForm = () => {
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };
