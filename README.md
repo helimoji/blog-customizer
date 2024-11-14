@@ -6,8 +6,6 @@
 
 <a target="_blank" align="center"><img src="./src/images/blog-custom-gif.gif" width="100%" alt="Гифка с обзором сайта"></a>
 
-[Открыть в браузере](https://destren1.github.io/blog-customizer/)
-
 ## Функционал:
 
 - Возможность открытия боковой панели и изменения параметров внешнего вида контента.
